@@ -1,0 +1,38 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 65ca48bcd70223abafff3a98ec609a8c6f11f6857d5fdf62737ffd50ef2f1fa3
+
+name:           calculator
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/ddxtanx/calculator#readme>
+homepage:       https://github.com/ddxtanx/calculator#readme
+author:         Garrett Credi
+maintainer:     garrettcredi@gmail.com
+copyright:      2020 Garrett Credi
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/ddxtanx/calculator
+
+library
+  exposed-modules:
+      Calculator
+      Ops
+      Parser
+      StringFuncs
+  other-modules:
+      Paths_calculator
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5
+  default-language: Haskell2010
