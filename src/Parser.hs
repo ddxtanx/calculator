@@ -48,7 +48,10 @@ consumeTokensAcc curExpr (OperT o1 : ParseT v : OperT o2 : tks)
         o2Preced = opTypePreced o2
 
         getAllHighOpTokens higher [] = (higher, [])
-        getAllHighOpTokens higher (OperT op1 : ParseT v1 : rest) = if opTypePreced op1 >= o2Preced then getAllHighOpTokens (higher ++ [OperT op1, ParseT v1]) rest else (higher, OperT op1 : ParseT v1 : rest)
+        getAllHighOpTokens higher (OperT op1 : ParseT v1 : rest) = 
+            if opTypePreced op1 >= o2Preced 
+            then getAllHighOpTokens (higher ++ [OperT op1, ParseT v1]) rest 
+            else (higher, OperT op1 : ParseT v1 : rest)
 
         (higherOpers, restTokens) = getAllHighOpTokens [] (OperT o2 : tks) 
         rightOp = consumeTokensAcc (parsePToken v) higherOpers
