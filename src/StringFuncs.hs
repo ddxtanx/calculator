@@ -1,11 +1,14 @@
 module StringFuncs
 (
     cutOutParen,
+    trimOuterParens,
     chunkByPredicate,
     breakUpString,
     strIsCalcValid,
     strToTokenChunks,
+    spanWhileNotUnOp,
     isNum,
+    startsWithOps,
     isOp,
     isExpr
 ) where
@@ -36,6 +39,15 @@ cutOutParenSerial (c:cs) i _= c:rest
             ')' -> cutOutParenSerial cs (i-1) True
             _ -> cutOutParenSerial cs i True
             
+trimOuterParens :: String -> String
+trimOuterParens "" = ""
+trimOuterParens "(" = ""
+trimOuterParens ")" = ""
+trimOuterParens [x] = [x]
+trimOuterParens str
+    | head str == '(' && last str == ')'  = tail . init $ str
+    | otherwise                           = str
+
 cutOutParen :: String -> String
 cutOutParen str = rmParens $ cutOutParenSerial drpParenStr 0 False
     where
@@ -65,16 +77,13 @@ breakUpString = chunkByPredicate (not . (`elem` opChars)) . filter notParenNotSp
         notParenNotSpace c = c /= '(' && c /= ')' && c /= ' '
 
 opsAreValid :: String -> Bool
-opsAreValid str = all isValid (zip readStr brokenUpStr) && notEndOnOp
+opsAreValid str = all isValid strBrokenUp && notEndOnOp
     where
-        isValid (Just _, _) = True
-        isValid (Nothing, str) = length str == 1
-
-        brokenUpStr = breakUpString str
-
-        readStr = map readMaybe brokenUpStr :: [Maybe Int]
-
-        notEndOnOp = null readStr || isJust (last readStr) 
+        strBrokenUp = breakUpString str
+        isValid :: String -> Bool
+        isValid str' = not (isOp str') || (length str' == 1)
+        notEndOnOp = not . isOp . last $ strBrokenUp
+                        
 
 strIsCalcValid :: String -> Bool
 strIsCalcValid str = parensBalanced strTrimd && opsAreValid strTrimd
@@ -87,18 +96,43 @@ cartProd f g x = (f x, g x)
 isNum :: String -> Bool
 isNum = isJust . (readMaybe :: String -> Maybe Int)
 
+startsWithOps :: String -> Bool
+startsWithOps str = (not . null $ opChunk) && opsNotIn rest
+    where
+        (opChunk, rest) = spanWhileNotUnOp str
+        restParenSection = cutOutParen rest
+        opsNotIn str' = (isJust . (readMaybe :: String -> Maybe Int) $ str') || rest == '(' : restParenSection ++ [')']
+
+
 isOp :: String -> Bool
 isOp = all (`elem` opChars)
 
 isExpr :: String -> Bool
 isExpr str = not $ isNum str || isOp str 
 
+takeWhileNotUnOp :: String -> String
+takeWhileNotUnOp str = twnuoAcc str ""
+    where
+        twnuoAcc [] acc = acc
+        twnuoAcc (x:xs) acc = if acc `elem` unOpSymbs then acc else twnuoAcc xs (acc ++ [x])
+
+spanWhileNotUnOp :: String -> (String, String)
+spanWhileNotUnOp str = (taken, drop (length taken) str)
+    where
+        taken = takeWhileNotUnOp str
+
 strToTokenChunks :: String -> [String]
-strToTokenChunks str = trim $ cbpUntilAcc isOpChar isParen sliceOutParen str [] []
+strToTokenChunks str = combUnOps . trim $ cbpUntilAcc isOpChar isParen sliceOutParen str [] []
     where
         isOpChar c = c `elem` opChars
         isParen = (==) '('
         
-        sliceOutParen str = cartProd id (\s -> drop (length s + 2) str) . cutOutParen $ str
+        cutOutParenSurr s= '(' : cutOutParen s ++ [')']
+        sliceOutParen str = cartProd id (\s -> drop (length s) str) . cutOutParenSurr $ str
 
         trim = filter (not . null)
+
+        combUnOps :: [String] -> [String]
+        combUnOps [] = []
+        combUnOps [x] = [x]
+        combUnOps (x:y:rest) = if all (`elem` concat unOpSymbs) x then (x ++ y):combUnOps rest else x: combUnOps (y:rest) 

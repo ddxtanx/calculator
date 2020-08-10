@@ -4,7 +4,6 @@ module Parser
 ) where
 
 import Ops 
-import AbList
 import StringFuncs
 
 data Parseable n = Val n | Promise String
@@ -12,45 +11,46 @@ data Parseable n = Val n | Promise String
 data Token n = OperT OpType | ParseT (Parseable n)
     deriving Show
 
-type TokenSeq n= AbList (Parseable n) OpType
-
 toToken :: (Read n) => String -> Token n
 toToken str 
     | isNum str         = ParseT (Val (read str))
     | isOp str          = OperT (assocOpType (head str))
-    | otherwise         = ParseT (Promise str)
-    where
-        assocOpType '+' = Add
-        assocOpType '-' = Sub
-        assocOpType '*' = Mul
-        assocOpType '/' = Div
+    | otherwise         = ParseT (Promise (trimOuterParens str))
 
 
 strToTokens :: (Read n) => String -> [Token n]
 strToTokens = map toToken . strToTokenChunks
 
-strToTokenSeq :: (Read n) => String -> TokenSeq n
-strToTokenSeq = toSeq . strToTokens
-    where
-        toSeq [] = AbNil
-        toSeq [ParseT x] = x :/ AbNil
-        toSeq (ParseT x:OperT y: rest) = x :/ y :/ toSeq rest
-
 parse :: (Read n) => String -> Expr n
 parse str 
     | isNum str         = Const (read str)
-    | otherwise         = consumeTokens . strToTokenSeq $ str
+    | startsWithOps str = Un (assocUnSymb unOpSymb) (parse rest)
+    | otherwise         = consumeTokens . strToTokens $ str
+    where
+        
+        (unOpSymb, rest) = spanWhileNotUnOp str
         
 parsePToken :: (Read n) => Parseable n -> Expr n
 parsePToken (Val n) = Const n
 parsePToken (Promise str) = parse str
 
-consumeTokens :: (Read n) => TokenSeq n -> Expr n
-consumeTokens (start :/ rest) = consumeTokensAcc (parsePToken start) rest
+consumeTokens :: (Read n) => [Token n] -> Expr n
+consumeTokens (ParseT start : rest) = consumeTokensAcc (parsePToken start) rest
 
-consumeTokensAcc :: (Read n) => Expr n -> AbList OpType (Parseable n) -> Expr n
-consumeTokensAcc curExpr AbNil = curExpr
-consumeTokensAcc curExpr (o :/ v :/ AbNil) = Op o curExpr (parsePToken v)
-consumeTokensAcc curExpr (o1 :/ v :/ o2 :/ tks) 
-    | opTypePreced o1 >= opTypePreced o2        = consumeTokensAcc (Op o1 curExpr (parsePToken v)) (o2 :/ tks)
-    | otherwise                                 = Op o1 curExpr (consumeTokensAcc (parsePToken v) (o2 :/ tks))
+consumeTokensAcc :: (Read n) => Expr n -> [Token n] -> Expr n
+consumeTokensAcc curExpr [] = curExpr
+consumeTokensAcc curExpr [OperT o, ParseT v] =  Op o curExpr (parsePToken v)
+consumeTokensAcc curExpr (OperT o1 : ParseT v : OperT o2 : tks) 
+    | o1Preced >= o2Preced  = consumeTokensAcc (Op o1 curExpr (parsePToken v)) (OperT o2 : tks)
+    | otherwise             = consumeTokensAcc combinedExpr restTokens
+    where
+        o1Preced = opTypePreced o1
+        o2Preced = opTypePreced o2
+
+        getAllHighOpTokens higher [] = (higher, [])
+        getAllHighOpTokens higher (OperT op1 : ParseT v1 : rest) = if opTypePreced op1 >= o2Preced then getAllHighOpTokens (higher ++ [OperT op1, ParseT v1]) rest else (higher, OperT op1 : ParseT v1 : rest)
+
+        (higherOpers, restTokens) = getAllHighOpTokens [] (OperT o2 : tks) 
+        rightOp = consumeTokensAcc (parsePToken v) higherOpers
+        
+        combinedExpr = Op o1 curExpr rightOp
