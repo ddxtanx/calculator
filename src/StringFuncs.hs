@@ -67,7 +67,6 @@ breakUpString = chunkByPredicate (not . (`elem` opChars)) . filter notParenNotSp
 opsAreValid :: String -> Bool
 opsAreValid str = all isValid (zip readStr brokenUpStr) && notEndOnOp
     where
-        isValid :: (Maybe Int, String) -> Bool
         isValid (Just _, _) = True
         isValid (Nothing, str) = length str == 1
 
@@ -102,5 +101,4 @@ strToTokenChunks str = trim $ cbpUntilAcc isOpChar isParen sliceOutParen str [] 
         
         sliceOutParen str = cartProd id (\s -> drop (length s + 2) str) . cutOutParen $ str
 
-        trim :: [[a]] -> [[a]]
         trim = filter (not . null)

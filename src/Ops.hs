@@ -11,6 +11,8 @@ module Ops
 
 data OpType = Add | Sub | Mul | Div
     deriving Show
+
+ops :: [OpType]
 ops = [Add, Sub, Mul, Div]
 
 data Expr n = Const n | Op OpType (Expr n) (Expr n)
