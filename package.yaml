@@ -1,0 +1,32 @@
+name: Calculator
+version: 0.2.0.0
+description:    Please see the README on GitHub at <https://github.com/ddxtanx calculator#readme>
+author: Garrett Credi
+copyright: 2020 Garrett Credi
+github: ddxtanx/calculator
+dependencies:
+  - base
+library:
+  exposed: True
+  source-dirs:
+    src
+
+executable:
+  source-dirs:
+    - app
+    - src
+  main:
+    Main.hs
+
+tests:
+  calculator-tests:
+    main: MainTest.hs
+    source-dirs: test
+    dependencies: 
+      - HUnit
+      - Calculator
+
+    
+  
+  
+    
