@@ -1,8 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.2.
+-- This file has been generated from package.yaml by hpack version 0.33.0.
 --
 -- see: https://github.com/sol/hpack
+--
+-- hash: b185b9280e454321cf99cb51f979b149099aa3ad4a03e126e3d74ed2a22281de
 
 name:           Calculator
 version:        0.2.0.0
@@ -52,13 +54,19 @@ executable Calculator
 
 test-suite calculator-tests
   type: exitcode-stdio-1.0
-  main-is: MainTest.hs
+  main-is: Main.hs
   other-modules:
+      CalculateTest
+      OpsTest
+      ParserTest
+      StringFuncsTest
       Paths_Calculator
   hs-source-dirs:
       test
   build-depends:
       Calculator
-    , HUnit
     , base
+    , tasty
+    , tasty-hunit
+    , tasty-quickcheck
   default-language: Haskell2010

@@ -15,8 +15,8 @@ function and then finish with the character associations!
 -}
 module Ops
 (
-    OpType(Add, Sub, Mul, Div),
-    UnaryOp(Neg),
+    OpType(Add, Sub, Mul, Div, Exp),
+    UnaryOp(Neg, Succ),
     Expr(Const, Un, Op),
     opTypePreced,
     opTypeEval,

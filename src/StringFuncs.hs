@@ -13,7 +13,6 @@ whether or not is actually represents a calculable string.
 -}
 module StringFuncs
 (
-    cutOutParen,
     trimOuterParens,
     chunkByPredicate,
     breakUpString,
@@ -209,7 +208,7 @@ strToTokenChunks str =
         isOpChar c = c `elem` opChars
         isParen = (==) '('
         
-        cutOutParenSurr s= '(' : cutOutParen s ++ [')']
+        cutOutParenSurr s = "(" ++ cutOutParen s ++ ")"
         sliceOutParen str = cartProd 
             id (\s -> drop (length s) str) . cutOutParenSurr 
             $ str

@@ -1,5 +1,5 @@
 name: Calculator
-version: 0.2.0.0
+version: 0.2.1.0
 description:    Please see the README on GitHub at <https://github.com/ddxtanx calculator#readme>
 author: Garrett Credi
 copyright: 2020 Garrett Credi
@@ -20,11 +20,13 @@ executable:
 
 tests:
   calculator-tests:
-    main: MainTest.hs
+    main: Main.hs
     source-dirs: test
     dependencies: 
-      - HUnit
       - Calculator
+      - tasty
+      - tasty-hunit
+      - tasty-quickcheck
 
     
   
