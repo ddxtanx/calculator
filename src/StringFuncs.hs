@@ -1,3 +1,4 @@
+{-# LANGUAGE BangPatterns #-}
 {-|
 Module      : StringFuncs
 Description : String functions important for calculator parsing.
@@ -90,7 +91,7 @@ cbpUntilAcc ::
     -> [[a]] -- ^ Chunks accumulator
     -> [[a]] -- ^ Fully chunked
 cbpUntilAcc _ _ _ [] mem acc = acc ++ [mem]
-cbpUntilAcc pred trig prcs (x:xs) mem acc
+cbpUntilAcc pred trig prcs (x:xs) !mem !acc
     | trig x       = 
         cbpUntilAcc pred trig prcs newXs [] (acc ++ mem:[processedXs])
     | pred x       = cbpUntilAcc pred trig prcs xs (mem ++ [x]) acc
@@ -193,7 +194,7 @@ takeWhileNotUnOp :: String -> String
 takeWhileNotUnOp str = twnuoAcc str ""
     where
         twnuoAcc [] acc = acc
-        twnuoAcc (x:xs) acc = 
+        twnuoAcc (x:xs) !acc = 
             if acc `elem` unOpSymbs || x `notElem` concat unOpSymbs 
             then acc 
             else twnuoAcc xs (acc ++ [x])

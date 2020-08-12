@@ -31,6 +31,7 @@ module Ops
 
 import Failable
 import Data.Fixed
+import Control.Monad
 -- | Token representing unary operators
 data UnaryOp = 
     Neg -- ^ Token for negation
@@ -126,6 +127,8 @@ unOpSym Succ = "#"
 assocUnSymb :: String -> Failable UnaryOp
 assocUnSymb "~" = pure Neg
 assocUnSymb "#" = pure Succ
+assocUnSymb str = 
+    Error $ str ++ " has no associated operator. From assocUnSymb."
 
 -- | The set of all chars that are associated to a binary operator.
 opChars :: String 
@@ -138,9 +141,7 @@ unOpSymbs = map unOpSym unOps
 -- | A function that recursively evaluates an expression to the fractional it represents.
 eval :: Expr ResultType -> Failable ResultType
 eval (Const x) = pure x
-eval (Un uo x) = do
-    xv <- eval x
-    return $ unOpApply uo xv
+eval (Un uo x) = unOpApply uo <$> eval x
 eval (Op o l r) = do
     lv <- eval l
     rv <- eval r

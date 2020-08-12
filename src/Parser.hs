@@ -37,11 +37,10 @@ data Token =
 
 -- | Reads a token string into the token it represents.
 toToken :: String -> Failable Token
+toToken "" = Error "Cannot tokenize empty string. From toToken."
 toToken str 
-    | isNum str         = pure $ ParseT (Val (read str))
-    | isOp str          = do
-        opType <- assocOpType (head str)
-        return $ OperT opType
+    | isNum str         = Result $ ParseT (Val (read str))
+    | isOp str          = OperT <$> (assocOpType . head $ str)
     | otherwise         = pure $ ParseT (Promise (trimOuterParens str))
 
 -- | Reads a calculator string into a list of tokens.
@@ -54,7 +53,7 @@ strToTokens = mapM toToken . strToTokenChunks
 -- | tokens are 'compiled' into the expression it represents.
 parse :: String -> Failable (Expr ResultType)
 parse str 
-    | isNum str                     = fmap (Const . read) str'
+    | isNum str                     = Const . read <$> str'
     | startsWithOps str             = do
         symb <- assocUnSymb unOpSymb
         restE <- parse rest
@@ -98,15 +97,14 @@ consumeTokensAcc curExpr [OperT o, ParseT v] = fmap
     (Op o curExpr) 
     (parsePToken v)
 consumeTokensAcc curExpr (OperT o1 : ParseT v : OperT o2 : tks) 
+    -- If the first operator is of equal or greater precedence than the next, just process as is 
     | o1Preced >= o2Preced  = do
         pTokenVal <- parsePToken v
         consumeTokensAcc 
             (Op o1 curExpr pTokenVal) 
             (OperT o2 : tks)
-        -- If the first operator is of equal or greater precedence than the next, just process as is 
+    -- Otherwise do some fancy processing explained below.  
     | otherwise             = do
-        -- Otherwise do some fancy processing explained below.
-
         -- This is just the token list, spanned into higher and not higher subsections.
         let (higherOpers, restTokens) = getAllHighOpTokens [] (OperT o2 : tks) 
         pTokenVal <- parsePToken v

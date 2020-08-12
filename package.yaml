@@ -6,6 +6,8 @@ copyright: 2020 Garrett Credi
 github: ddxtanx/calculator
 dependencies:
   base: "<=4.13.0.0"
+default-extensions:
+  BangPatterns
 library:
   exposed: True
   source-dirs:
