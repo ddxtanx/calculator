@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 47b896bb481c3efb7015eac803999dd217956171dd52037776696969c17b4d68
+-- hash: e148d9b8a9bcee3b45b89b97deb446c34618d87a948fdae038d06542fb86a70d
 
 name:           Calculator
 version:        0.2.1.0
@@ -26,6 +26,7 @@ library
   exposed: True
   exposed-modules:
       Calculate
+      Failable
       Ops
       Parser
       StringFuncs
@@ -34,13 +35,14 @@ library
   hs-source-dirs:
       src
   build-depends:
-      base
+      base <=4.13.0.0
   default-language: Haskell2010
 
 executable Calculator
   main-is: Main.hs
   other-modules:
       Calculate
+      Failable
       Ops
       Parser
       StringFuncs
@@ -49,7 +51,7 @@ executable Calculator
       app
       src
   build-depends:
-      base
+      base <=4.13.0.0
   default-language: Haskell2010
 
 test-suite calculator-tests
@@ -65,7 +67,7 @@ test-suite calculator-tests
       test
   build-depends:
       Calculator
-    , base
+    , base <=4.13.0.0
     , tasty
     , tasty-hunit
     , tasty-quickcheck

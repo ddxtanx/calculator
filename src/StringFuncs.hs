@@ -28,6 +28,7 @@ module StringFuncs
 import Ops
 import Text.Read
 import Data.Maybe
+import Failable
 
 -- | Accumulator for parens balanced
 parensBalancedSerial :: 
@@ -142,11 +143,15 @@ opsAreValid str = all isValid strBrokenUp && notEndOnOp
 -- | and there are no unknown characters present in it.
 -- | TODO: Make noWeridStuff more accurate by checking if any non-operator
 -- | strings are present, not just characters.
-strIsCalcValid :: String -> Bool
-strIsCalcValid str = 
-    parensBalanced strTrimd 
-    && opsAreValid strTrimd 
-    && noWeirdStuff strTrimd
+strIsCalcValid :: String -> Failable Bool
+strIsCalcValid str 
+    | not . parensBalanced $ strTrimd = 
+        Error "Parentheses are not balanced. From strIsCalcValid."
+    | not . opsAreValid $ strTrimd    = 
+        Error "Invalid operation sequenced. From strIsCalcValid."
+    | not . noWeirdStuff $ strTrimd   = 
+        Error "Unfamiliar characters present in string. From strIsCalcValid."
+    | otherwise                       = Result True
     where
         strTrimd = filter (/= ' ') str
         noWeirdStuff = 
@@ -172,7 +177,7 @@ startsWithOps str = (not . null $ opChunk) && opsNotIn rest
         (opChunk, rest) = spanWhileNotUnOp str
         restParenSection = cutOutParen rest
         opsNotIn str' = 
-            (isJust . (readMaybe :: String -> Maybe Int) $ str') 
+            (not . any (`elem` opChars) $ rest)
             || rest == '(' : restParenSection ++ [')']
 
 -- | Determine if a string is an operator
@@ -189,7 +194,7 @@ takeWhileNotUnOp str = twnuoAcc str ""
     where
         twnuoAcc [] acc = acc
         twnuoAcc (x:xs) acc = 
-            if acc `elem` unOpSymbs 
+            if acc `elem` unOpSymbs || x `notElem` concat unOpSymbs 
             then acc 
             else twnuoAcc xs (acc ++ [x])
 

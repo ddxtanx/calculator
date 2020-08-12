@@ -5,7 +5,7 @@ author: Garrett Credi
 copyright: 2020 Garrett Credi
 github: ddxtanx/calculator
 dependencies:
-  - base
+  base: "<=4.13.0.0"
 library:
   exposed: True
   source-dirs:

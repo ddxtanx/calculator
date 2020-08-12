@@ -15,9 +15,10 @@ function and then finish with the character associations!
 -}
 module Ops
 (
-    OpType(Add, Sub, Mul, Div, Exp),
+    OpType(Add, Sub, Mul, Div, Exp, Mod),
     UnaryOp(Neg, Succ),
     Expr(Const, Un, Op),
+    ResultType,
     opTypePreced,
     opTypeEval,
     opChar,
@@ -28,6 +29,8 @@ module Ops
     eval
 ) where
 
+import Failable
+import Data.Fixed
 -- | Token representing unary operators
 data UnaryOp = 
     Neg -- ^ Token for negation
@@ -44,10 +47,11 @@ data OpType =
     | Mul  -- ^ Token for multiplication
     | Div  -- ^ Token for division
     | Exp -- ^ Token for exponentiation
+    | Mod -- ^ Token for modulo
     deriving Show
 
 ops :: [OpType]
-ops = [Add, Sub, Mul, Div, Exp]
+ops = [Add, Sub, Mul, Div, Exp, Mod]
 
 -- | Datatype representing an expression, either a constant number, a
 -- | unary operator applied to an expression, or a binary operator
@@ -65,19 +69,34 @@ opTypePreced Sub = 1
 opTypePreced Mul = 2
 opTypePreced Div = 2
 opTypePreced Exp = 3
+opTypePreced Mod = 4
 
+type ResultType = Double
 -- | A function that applies a unary operator to a number.
-unOpApply :: (Floating n) => UnaryOp -> n -> n
+unOpApply :: UnaryOp -> ResultType -> ResultType
 unOpApply Neg = negate
 unOpApply Succ = (+1)
 
 -- | A function that applies a binary operator to two numbers.
-opTypeEval :: (Floating n) => OpType -> n -> n -> n
-opTypeEval Add = (+)
-opTypeEval Sub = (-)
-opTypeEval Mul = (*)
-opTypeEval Div = (/)
-opTypeEval Exp = (**)
+opTypeEval :: OpType -> ResultType -> ResultType -> Failable ResultType
+opTypeEval Add x y = Result $ x + y
+opTypeEval Sub x y = Result $ x - y
+opTypeEval Mul x y = Result $ x * y
+opTypeEval Div x 0 = Error "Division by zero not allowed. From opTypeEval."
+opTypeEval Div x y = Result $ x/y
+opTypeEval Exp 0 0 = Error "0^0 is not defined."
+opTypeEval Exp x y = 
+    if x < 0 && (not . isWhole) y
+    then Error 
+        "Fractional exponent of negative number is not real. From opTypeEval."
+    else Result $ x**y
+    where
+        isWhole n = n == fromInteger (round n)
+opTypeEval Mod x y = 
+    if y == 0
+    then Error "Cannot take remained w.r.t zero. From opTypeEval."
+    else Result $ mod' x y
+                    
 
 -- | A function that associates each binary operator to its symbol.
 opChar :: OpType -> Char
@@ -86,14 +105,17 @@ opChar Sub = '-'
 opChar Mul = '*'
 opChar Div = '/'
 opChar Exp = '^'
+opChar Mod = '%'
 
 -- | A function that associates a character to a binary operator.
-assocOpType :: Char -> OpType
-assocOpType '+' = Add
-assocOpType '-' = Sub
-assocOpType '*' = Mul
-assocOpType '/' = Div
-assocOpType '^' = Exp
+assocOpType :: Char -> Failable OpType
+assocOpType '+' = pure Add
+assocOpType '-' = pure Sub
+assocOpType '*' = pure Mul
+assocOpType '/' = pure Div
+assocOpType '^' = pure Exp
+assocOpType '%' = pure Mod
+assocOpType c = Error $ c : " has no associated operator. From assocOpType."
 
 -- | A function that associates a unary operator to its symbol.
 unOpSym :: UnaryOp -> String
@@ -101,9 +123,9 @@ unOpSym Neg = "~"
 unOpSym Succ = "#"
 
 -- | A function that associates a symbol to its unary operator.
-assocUnSymb :: String -> UnaryOp
-assocUnSymb "~" = Neg
-assocUnSymb "#" = Succ
+assocUnSymb :: String -> Failable UnaryOp
+assocUnSymb "~" = pure Neg
+assocUnSymb "#" = pure Succ
 
 -- | The set of all chars that are associated to a binary operator.
 opChars :: [Char] 
@@ -114,7 +136,12 @@ unOpSymbs :: [String]
 unOpSymbs = map unOpSym unOps
 
 -- | A function that recursively evaluates an expression to the fractional it represents.
-eval :: (Floating n) => Expr n -> n
-eval (Const x) = x
-eval (Un uo x) = unOpApply uo (eval x)
-eval (Op o l r) = opTypeEval o (eval l) (eval r)
+eval :: Expr ResultType -> Failable ResultType
+eval (Const x) = pure x
+eval (Un uo x) = do
+    xv <- eval x
+    return $ unOpApply uo xv
+eval (Op o l r) = do
+    lv <- eval l
+    rv <- eval r
+    opTypeEval o lv rv

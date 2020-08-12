@@ -17,11 +17,12 @@ module Calculate
 
 import StringFuncs
 import Parser
-import Ops(eval)
+import Failable
+import Ops(eval, ResultType)
 
 -- | Calculates the value of a string, if it is valid. If not, nothing is 
 -- | returned.
-calculate :: String -> Maybe Float
-calculate str 
-    | strIsCalcValid str    = Just (eval . parse $ str)
-    | otherwise     = Nothing
+calculate :: String -> Failable ResultType
+calculate str = do
+    expr <- parse str
+    eval expr
