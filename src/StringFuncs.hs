@@ -143,7 +143,7 @@ opsAreValid str = all isValid strBrokenUp && notEndOnOp
 -- | and there are no unknown characters present in it.
 -- | TODO: Make noWeridStuff more accurate by checking if any non-operator
 -- | strings are present, not just characters.
-strIsCalcValid :: String -> Failable Bool
+strIsCalcValid :: String -> Failable Bool 
 strIsCalcValid str 
     | not . parensBalanced $ strTrimd = 
         Error "Parentheses are not balanced. From strIsCalcValid."

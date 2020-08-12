@@ -8,7 +8,8 @@ import Data.Char(toLower)
 import Failable
 main :: IO ()
 main = do
-    putStrLn "Please input something to calculate, or enter end to end computations."
+    putStrLn 
+        "Please input something to calculate, or enter end to end computations."
     line <- getLine
     let lineLower = map toLower line
     if line == "end" 

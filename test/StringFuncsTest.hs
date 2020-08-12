@@ -1,43 +1,44 @@
 module StringFuncsTest 
 (
-    string_funcs_tests
+    stringFuncsTests
 )
 where
 
-import Test.Tasty
-import Test.Tasty.QuickCheck
-import Test.Tasty.HUnit
-
 import StringFuncs
 
-main :: IO()
-main = defaultMain string_funcs_tests
+import Test.Tasty
+import Test.Tasty.HUnit
+import Test.Tasty.QuickCheck
 
-string_funcs_tests = testGroup "String Functions Tests" $
+main :: IO()
+main = defaultMain stringFuncsTests
+
+stringFuncsTests = testGroup "String Functions Tests"
     [
-        sf_qc_tests, 
-        sf_hunit_tests
+        sfQcTests, 
+        sfHunitTests
     ]
 
 -- Quickcheck tests
-sf_qc_tests = testGroup "(QuickCheck tests)" $
+sfQcTests = testGroup "(QuickCheck tests)"
     [
-        prop_trimOuterTrims,
-        prop_numIsNum,
-        prop_chunkByEvenChunks
+        propTrimOuterTrims,
+        propNumIsNum,
+        propChunkByEvenChunks
     ]
 
-prop_trimOuterTrims = testProperty "TrimOuterParens trims parens" $ 
-    \ s -> (trimOuterParens $ "(" ++ s ++ ")") == s
+propTrimOuterTrims = testProperty "TrimOuterParens trims parens" $ 
+    \ s -> trimOuterParens ("(" ++ s ++ ")") == s
 
-prop_numIsNum = testProperty "Number strings are numbers" $
-    \ x -> (isNum $ show (x :: Int))
+propNumIsNum = testProperty "Number strings are numbers" $
+    \ x -> isNum $ show (x :: Int)
 
-prop_chunkByEvenChunks = testProperty "Chunking a number list by parity works" $
-    \ l' -> all id . map (\ l -> (all even l) || (all odd l)) . (chunkByPredicate even) $ (l' :: [Int])
+propChunkByEvenChunks = testProperty "Chunking a number list by parity works" $
+    \ l' -> all (\ l -> all even l || all odd l) . 
+    chunkByPredicate even $ (l' :: [Int])
 
 -- HUnit tests
-sf_hunit_tests = testGroup "(HUnit tests)" $ 
+sfHunitTests = testGroup "(HUnit tests)" 
     [
 
     ]

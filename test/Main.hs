@@ -1,9 +1,9 @@
 module Main where
     
-import Test.Tasty
 import OpsTest
 import StringFuncsTest
+import Test.Tasty
 
-tests = [ops_tests, string_funcs_tests]
+tests = [opsTests, stringFuncsTests]
 main :: IO()
 main = defaultMain $ testGroup "All Tests" tests

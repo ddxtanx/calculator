@@ -4,11 +4,11 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: e148d9b8a9bcee3b45b89b97deb446c34618d87a948fdae038d06542fb86a70d
+-- hash: b7dcec9c129e97ba570fb252f737f4546238514d42250a8305b39e9dfc3a7d3c
 
 name:           Calculator
-version:        0.2.1.0
-description:    Please see the README on GitHub at <https://github.com/ddxtanx calculator#readme>
+version:        0.2.2.0
+description:    Please see the README on GitHub at <https://github.com/ddxtanx/calculator#readme>
 homepage:       https://github.com/ddxtanx/calculator#readme
 bug-reports:    https://github.com/ddxtanx/calculator/issues
 author:         Garrett Credi

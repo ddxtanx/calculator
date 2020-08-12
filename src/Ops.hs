@@ -84,7 +84,7 @@ opTypeEval Sub x y = Result $ x - y
 opTypeEval Mul x y = Result $ x * y
 opTypeEval Div x 0 = Error "Division by zero not allowed. From opTypeEval."
 opTypeEval Div x y = Result $ x/y
-opTypeEval Exp 0 0 = Error "0^0 is not defined."
+opTypeEval Exp 0 0 = Error "0^0 is not defined. From opTypeEval."
 opTypeEval Exp x y = 
     if x < 0 && (not . isWhole) y
     then Error 
@@ -128,7 +128,7 @@ assocUnSymb "~" = pure Neg
 assocUnSymb "#" = pure Succ
 
 -- | The set of all chars that are associated to a binary operator.
-opChars :: [Char] 
+opChars :: String 
 opChars = map opChar ops
 
 -- | The set of all strings that are associated to a unary operator.

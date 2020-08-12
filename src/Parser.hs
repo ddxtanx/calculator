@@ -18,6 +18,7 @@ module Parser
 import Ops 
 import Failable
 import StringFuncs
+import Control.Monad
 
 -- | A data structure representing values that can be readily parsed into an 
 -- | expression.
@@ -31,7 +32,7 @@ data Parseable =
 -- | can parse into an expression
 data Token = 
     OperT OpType -- ^ A token representing a binary operator
-    | ParseT (Parseable) -- ^ A token representing a parseable value.
+    | ParseT Parseable -- ^ A token representing a parseable value.
     deriving Show
 
 -- | Reads a token string into the token it represents.
@@ -40,12 +41,12 @@ toToken str
     | isNum str         = pure $ ParseT (Val (read str))
     | isOp str          = do
         opType <- assocOpType (head str)
-        return $ OperT (opType)
+        return $ OperT opType
     | otherwise         = pure $ ParseT (Promise (trimOuterParens str))
 
 -- | Reads a calculator string into a list of tokens.
 strToTokens :: String -> Failable [Token]
-strToTokens = sequence . (fmap toToken) . strToTokenChunks
+strToTokens = mapM toToken . strToTokenChunks
 
 -- | Parses a string into an expression. For nums and parseable values
 -- | attached to a unary operator, parsing is done simply recursively, but for
@@ -58,10 +59,7 @@ parse str
         symb <- assocUnSymb unOpSymb
         restE <- parse rest
         return $ Un symb restE
-    | otherwise                     = do
-        strv <- str'
-        tokens <- strToTokens strv
-        consumeTokens tokens
+    | otherwise                     = (consumeTokens <=< strToTokens) =<< str'
     where
         strValid = strIsCalcValid str
         str' = case strValid of
@@ -96,32 +94,32 @@ consumeTokensAcc ::
     -> [Token] -- ^ The list of remaining tokens to consume.
     -> Failable (Expr ResultType) -- ^ The compiled expression.
 consumeTokensAcc curExpr [] = Result curExpr
-consumeTokensAcc curExpr [OperT o, ParseT v] =  fmap 
+consumeTokensAcc curExpr [OperT o, ParseT v] = fmap 
     (Op o curExpr) 
     (parsePToken v)
 consumeTokensAcc curExpr (OperT o1 : ParseT v : OperT o2 : tks) 
     | o1Preced >= o2Preced  = do
         pTokenVal <- parsePToken v
         consumeTokensAcc 
-            (Op o1 curExpr (pTokenVal)) 
+            (Op o1 curExpr pTokenVal) 
             (OperT o2 : tks)
         -- If the first operator is of equal or greater precedence than the next, just process as is 
     | otherwise             = do
         -- Otherwise do some fancy processing explained below.
-        -- Gets all the higher precedence operators succeeding operator 1.
-        
 
         -- This is just the token list, spanned into higher and not higher subsections.
         let (higherOpers, restTokens) = getAllHighOpTokens [] (OperT o2 : tks) 
         pTokenVal <- parsePToken v
         rightOp <- consumeTokensAcc pTokenVal higherOpers
-        -- The combined operator is just op1 applied to the expression in memory and the expression parsed from the higher precedence operators.
+
+        -- The combined expression is just op1 applied to the expression in memory and the expression parsed from the higher precedence operators.
         let combinedExpr = Op o1 curExpr rightOp
         consumeTokensAcc combinedExpr restTokens
     where
         o1Preced = opTypePreced o1
         o2Preced = opTypePreced o2
-        
+
+         -- Gets all the higher precedence operators succeeding operator 1.
         getAllHighOpTokens higher [] = (higher, [])
         getAllHighOpTokens higher (OperT op1 : ParseT v1 : rest) = 
             if opTypePreced op1 >= o2Preced 

@@ -19,10 +19,9 @@ import StringFuncs
 import Parser
 import Failable
 import Ops(eval, ResultType)
+import Control.Monad
 
 -- | Calculates the value of a string, if it is valid. If not, nothing is 
 -- | returned.
 calculate :: String -> Failable ResultType
-calculate str = do
-    expr <- parse str
-    eval expr
+calculate = eval <=< parse
