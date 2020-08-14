@@ -24,8 +24,12 @@ module Ops
     opChar,
     assocOpType,
     assocUnSymb,
+    unOps,
+    ops,
     opChars,
+    unOpSym,
     unOpSymbs,
+    toString,
     eval
 ) where
 
@@ -36,7 +40,7 @@ import Control.Monad
 data UnaryOp = 
     Neg -- ^ Token for negation
     | Succ -- ^ Token for successor
-    deriving Show
+    deriving (Eq, Show)
 
 unOps :: [UnaryOp]
 unOps = [Neg, Succ]
@@ -49,7 +53,7 @@ data OpType =
     | Div  -- ^ Token for division
     | Exp -- ^ Token for exponentiation
     | Mod -- ^ Token for modulo
-    deriving Show
+    deriving (Eq, Show)
 
 ops :: [OpType]
 ops = [Add, Sub, Mul, Div, Exp, Mod]
@@ -58,10 +62,10 @@ ops = [Add, Sub, Mul, Div, Exp, Mod]
 -- | unary operator applied to an expression, or a binary operator
 -- | applied to two expressions.
 data Expr n = 
-    Const n -- ^ A constant number
+    Const Int -- ^ A constant number
     | Un UnaryOp (Expr n) -- ^ A unary operator applied to an expression.
     | Op OpType (Expr n) (Expr n) -- ^ A Binary operator applied to two expressions.
-    deriving Show
+    deriving (Eq, Show)
 
 -- | A function associating each binary operator to its precedence.
 opTypePreced :: OpType -> Int
@@ -139,9 +143,17 @@ opChars = map opChar ops
 unOpSymbs :: [String]
 unOpSymbs = map unOpSym unOps
 
+
+toString :: (Show a) => Expr a -> String
+toString (Const x) 
+    | x < 0 = "~" ++ show (-x)
+    | otherwise = show x
+toString (Op o l r) = "(" ++ toString l ++ [opChar o] ++ toString r ++ ")"
+toString (Un o e) = unOpSym o ++ toString e
+
 -- | A function that recursively evaluates an expression to the fractional it represents.
 eval :: Expr ResultType -> Failable ResultType
-eval (Const x) = pure x
+eval (Const x) = pure . fromIntegral $ x
 eval (Un uo x) = unOpApply uo <$> eval x
 eval (Op o l r) = do
     lv <- eval l

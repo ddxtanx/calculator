@@ -20,7 +20,7 @@ import Failable
 import Ops(eval, ResultType)
 import Control.Monad
 
--- | Calculates the value of a string, if it is valid. If not, nothing is 
--- | returned.
+-- | Calculates the value of a string, if it is valid. If not, the error that
+-- | arose during computation is reported.
 calculate :: String -> Failable ResultType
 calculate = eval <=< parse

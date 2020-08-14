@@ -23,7 +23,7 @@ import Control.Monad
 -- | A data structure representing values that can be readily parsed into an 
 -- | expression.
 data Parseable = 
-    Val ResultType -- ^ A plain value.
+    Val Int -- ^ A plain value.
     | Promise String -- ^ A not-yet-processed promise to parse a string
                      -- ^ i.e. a parenthetical sub-expression.
     deriving Show

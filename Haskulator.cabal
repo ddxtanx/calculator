@@ -4,10 +4,10 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0d61780b4022c5cec9a81e0664671677443c4ba2e3fb888fc232cab90ab224f2
+-- hash: e550b03c4b139b2d1c7d3a894e3844295d622bd2a9830e84d6cd2ac0fd195e4e
 
 name:           Haskulator
-version:        0.2.3.0
+version:        1.0.0.0
 description:    Please see the README on GitHub at <https://github.com/ddxtanx/haskulator#readme>
 homepage:       https://github.com/ddxtanx/haskulator#readme
 bug-reports:    https://github.com/ddxtanx/haskulator/issues
@@ -34,7 +34,6 @@ library
       Paths_Haskulator
   hs-source-dirs:
       src
-  default-extensions: BangPatterns
   build-depends:
       base <=4.13.0.0
   default-language: Haskell2010
@@ -49,9 +48,8 @@ executable Haskulator
       StringFuncs
       Paths_Haskulator
   hs-source-dirs:
-      app
       src
-  default-extensions: BangPatterns
+      app
   build-depends:
       base <=4.13.0.0
   default-language: Haskell2010
@@ -60,17 +58,21 @@ test-suite calculator-tests
   type: exitcode-stdio-1.0
   main-is: Main.hs
   other-modules:
-      CalculateTest
+      Calculate
+      Failable
+      Ops
+      Parser
+      StringFuncs
       OpsTest
       ParserTest
       StringFuncsTest
+      UsefulGenerators
       Paths_Haskulator
   hs-source-dirs:
+      src
       test
-  default-extensions: BangPatterns
   build-depends:
-      Haskulator
-    , base <=4.13.0.0
+      base <=4.13.0.0
     , tasty
     , tasty-hunit
     , tasty-quickcheck

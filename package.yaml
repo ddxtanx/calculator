@@ -1,31 +1,29 @@
 name: Haskulator
-version: 0.2.3.0
+version: 1.0.0.0
 description: Please see the README on GitHub at <https://github.com/ddxtanx/haskulator#readme>
 author: Garrett Credi
 copyright: 2020 Garrett Credi
 github: ddxtanx/haskulator
 dependencies:
   base: "<=4.13.0.0"
-default-extensions:
-  BangPatterns
+source-dirs:
+    src
 library:
   exposed: True
-  source-dirs:
-    src
+  
 
 executable:
   source-dirs:
     - app
-    - src
   main:
     Main.hs
 
 tests:
   calculator-tests:
     main: Main.hs
-    source-dirs: test
+    source-dirs: 
+      - test
     dependencies: 
-      - Haskulator
       - tasty
       - tasty-hunit
       - tasty-quickcheck

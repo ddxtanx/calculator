@@ -219,7 +219,7 @@ strToTokenChunks str =
             id (\s -> drop (length s) str) . cutOutParenSurr 
             $ str
 
-        trim = filter (not . null)
+        trim = filter (any (/= ' '))
 
         -- | Combines seperated unary operators and the value they're applied to
         -- | into a single string that contains the operator and the value.
