@@ -15,9 +15,9 @@ function and then finish with the character associations!
 -}
 module Ops
 (
-    OpType(Add, Sub, Mul, Div, Exp, Mod),
-    UnaryOp(Neg, Succ),
-    Expr(Const, Un, Op),
+    OpType(..),
+    UnaryOp(..),
+    Expr(..),
     ResultType,
     opTypePreced,
     opTypeEval,
@@ -72,6 +72,7 @@ opTypePreced Div = 2
 opTypePreced Exp = 3
 opTypePreced Mod = 4
 
+-- | This determines the type of the result that the calculator returns.
 type ResultType = Double
 -- | A function that applies a unary operator to a number.
 unOpApply :: UnaryOp -> ResultType -> ResultType

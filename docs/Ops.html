@@ -1,11 +1,720 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Ops</title><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean" /><script src="haddock-util.js" type="text/javascript"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script><script type="text/javascript">//<![CDATA[
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Ops</title
+    ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
 window.onload = function () {pageLoad();};
 //]]>
-</script></head><body><div id="package-header"><ul class="links" id="page-menu"><li><a href="index.html">Contents</a></li><li><a href="doc-index.html">Index</a></li></ul><p class="caption empty">&nbsp;</p></div><div id="content"><div id="module-header"><table class="info"><tr><th valign="top">Copyright</th><td>(c) Garrett Credi (2020)</td></tr><tr><th>License</th><td>GPL-3</td></tr><tr><th>Maintainer</th><td>garrettcredi@gmail.com</td></tr><tr><th>Stability</th><td>stable</td></tr><tr><th>Safe Haskell</th><td>Safe</td></tr></table><p class="caption">Ops</p></div><div id="description"><p class="caption">Description</p><div class="doc"><p>This module helps the calculator deal with operations in a functional manner
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption empty"
+      >&nbsp;</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th valign="top"
+	    >Copyright</th
+	    ><td
+	    >(c) Garrett Credi (2020)</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >License</th
+	    ><td
+	    >GPL-3</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Maintainer</th
+	    ><td
+	    >garrettcredi@gmail.com</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Stability</th
+	    ><td
+	    >stable</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >Safe</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Ops</p
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >This module helps the calculator deal with operations in a functional manner
 by providing recursive datatypes and functions that represent expressions and 
 the different ways in which operators can be applied to them. To add custom  
 operators just add the token you want to represent it to either UnaryOp or 
 OpType, if it is a binary operator, add its precedence in, add its evaluation 
-function and then finish with the character associations!</p></div></div><div id="synopsis"><p id="control.syn" class="caption expander" onclick="toggleSection('syn')">Synopsis</p><ul id="section.syn" class="hide" onclick="toggleSection('syn')"><li class="src short"><span class="keyword">data</span> <a href="#t:OpType">OpType</a><ul class="subs"><li>= <a href="#v:Add">Add</a></li><li>| <a href="#v:Sub">Sub</a></li><li>| <a href="#v:Mul">Mul</a></li><li>| <a href="#v:Div">Div</a></li></ul></li><li class="src short"><span class="keyword">data</span> <a href="#t:UnaryOp">UnaryOp</a> = <a href="#v:Neg">Neg</a></li><li class="src short"><span class="keyword">data</span> <a href="#t:Expr">Expr</a> n<ul class="subs"><li>= <a href="#v:Const">Const</a> n</li><li>| <a href="#v:Un">Un</a> <a href="Ops.html#t:UnaryOp">UnaryOp</a> (<a href="Ops.html#t:Expr">Expr</a> n)</li><li>| <a href="#v:Op">Op</a> <a href="Ops.html#t:OpType">OpType</a> (<a href="Ops.html#t:Expr">Expr</a> n) (<a href="Ops.html#t:Expr">Expr</a> n)</li></ul></li><li class="src short"><a href="#v:opTypePreced">opTypePreced</a> :: <a href="Ops.html#t:OpType">OpType</a> -&gt; Int</li><li class="src short"><a href="#v:opTypeEval">opTypeEval</a> :: Floating n =&gt; <a href="Ops.html#t:OpType">OpType</a> -&gt; n -&gt; n -&gt; n</li><li class="src short"><a href="#v:opChar">opChar</a> :: <a href="Ops.html#t:OpType">OpType</a> -&gt; Char</li><li class="src short"><a href="#v:assocOpType">assocOpType</a> :: Char -&gt; <a href="Ops.html#t:OpType">OpType</a></li><li class="src short"><a href="#v:assocUnSymb">assocUnSymb</a> :: String -&gt; <a href="Ops.html#t:UnaryOp">UnaryOp</a></li><li class="src short"><a href="#v:opChars">opChars</a> :: [Char]</li><li class="src short"><a href="#v:unOpSymbs">unOpSymbs</a> :: [String]</li><li class="src short"><a href="#v:eval">eval</a> :: Floating n =&gt; <a href="Ops.html#t:Expr">Expr</a> n -&gt; n</li></ul></div><div id="interface"><h1>Documentation</h1><div class="top"><p class="src"><span class="keyword">data</span> <a id="t:OpType" class="def">OpType</a> <a href="#t:OpType" class="selflink">#</a></p><div class="doc"><p>Token representing binary operators</p></div><div class="subs constructors"><p class="caption">Constructors</p><table><tr><td class="src"><a id="v:Add" class="def">Add</a></td><td class="doc"><p>Token for addition</p></td></tr><tr><td class="src"><a id="v:Sub" class="def">Sub</a></td><td class="doc"><p>Token for subtraction</p></td></tr><tr><td class="src"><a id="v:Mul" class="def">Mul</a></td><td class="doc"><p>Token for multiplication</p></td></tr><tr><td class="src"><a id="v:Div" class="def">Div</a></td><td class="doc"><p>Token for division</p></td></tr></table></div><div class="subs instances"><p id="control.i:OpType" class="caption collapser" onclick="toggleSection('i:OpType')">Instances</p><div id="section.i:OpType" class="show"><table><tr><td class="src clearfix"><span class="inst-left"><span id="control.i:id:OpType:Show:1" class="instance expander" onclick="toggleSection('i:id:OpType:Show:1')"></span> Show <a href="Ops.html#t:OpType">OpType</a></span> <a href="#t:OpType" class="selflink">#</a></td><td class="doc empty">&nbsp;</td></tr><tr><td colspan="2"><div id="section.i:id:OpType:Show:1" class="inst-details hide"><div class="subs methods"><p class="caption">Methods</p><p class="src"><a href="#v:showsPrec">showsPrec</a> :: Int -&gt; <a href="Ops.html#t:OpType">OpType</a> -&gt; ShowS</p><p class="src"><a href="#v:show">show</a> :: <a href="Ops.html#t:OpType">OpType</a> -&gt; String</p><p class="src"><a href="#v:showList">showList</a> :: [<a href="Ops.html#t:OpType">OpType</a>] -&gt; ShowS</p></div></div></td></tr></table></div></div></div><div class="top"><p class="src"><span class="keyword">data</span> <a id="t:UnaryOp" class="def">UnaryOp</a> <a href="#t:UnaryOp" class="selflink">#</a></p><div class="doc"><p>Token representing unary operators</p></div><div class="subs constructors"><p class="caption">Constructors</p><table><tr><td class="src"><a id="v:Neg" class="def">Neg</a></td><td class="doc"><p>Token for negation</p></td></tr></table></div><div class="subs instances"><p id="control.i:UnaryOp" class="caption collapser" onclick="toggleSection('i:UnaryOp')">Instances</p><div id="section.i:UnaryOp" class="show"><table><tr><td class="src clearfix"><span class="inst-left"><span id="control.i:id:UnaryOp:Show:1" class="instance expander" onclick="toggleSection('i:id:UnaryOp:Show:1')"></span> Show <a href="Ops.html#t:UnaryOp">UnaryOp</a></span> <a href="#t:UnaryOp" class="selflink">#</a></td><td class="doc empty">&nbsp;</td></tr><tr><td colspan="2"><div id="section.i:id:UnaryOp:Show:1" class="inst-details hide"><div class="subs methods"><p class="caption">Methods</p><p class="src"><a href="#v:showsPrec">showsPrec</a> :: Int -&gt; <a href="Ops.html#t:UnaryOp">UnaryOp</a> -&gt; ShowS</p><p class="src"><a href="#v:show">show</a> :: <a href="Ops.html#t:UnaryOp">UnaryOp</a> -&gt; String</p><p class="src"><a href="#v:showList">showList</a> :: [<a href="Ops.html#t:UnaryOp">UnaryOp</a>] -&gt; ShowS</p></div></div></td></tr></table></div></div></div><div class="top"><p class="src"><span class="keyword">data</span> <a id="t:Expr" class="def">Expr</a> n <a href="#t:Expr" class="selflink">#</a></p><div class="doc"><p>Datatype representing an expression, either a constant number, a
+function and then finish with the character associations!</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:OpType"
+	    >OpType</a
+	    ><ul class="subs"
+	    ><li
+	      >= <a href="#v:Add"
+		>Add</a
+		></li
+	      ><li
+	      >| <a href="#v:Sub"
+		>Sub</a
+		></li
+	      ><li
+	      >| <a href="#v:Mul"
+		>Mul</a
+		></li
+	      ><li
+	      >| <a href="#v:Div"
+		>Div</a
+		></li
+	      ><li
+	      >| <a href="#v:Exp"
+		>Exp</a
+		></li
+	      ><li
+	      >| <a href="#v:Mod"
+		>Mod</a
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:UnaryOp"
+	    >UnaryOp</a
+	    ><ul class="subs"
+	    ><li
+	      >= <a href="#v:Neg"
+		>Neg</a
+		></li
+	      ><li
+	      >| <a href="#v:Succ"
+		>Succ</a
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:Expr"
+	    >Expr</a
+	    > n<ul class="subs"
+	    ><li
+	      >= <a href="#v:Const"
+		>Const</a
+		> n</li
+	      ><li
+	      >| <a href="#v:Un"
+		>Un</a
+		> <a href="Ops.html#t:UnaryOp"
+		>UnaryOp</a
+		> (<a href="Ops.html#t:Expr"
+		>Expr</a
+		> n)</li
+	      ><li
+	      >| <a href="#v:Op"
+		>Op</a
+		> <a href="Ops.html#t:OpType"
+		>OpType</a
+		> (<a href="Ops.html#t:Expr"
+		>Expr</a
+		> n) (<a href="Ops.html#t:Expr"
+		>Expr</a
+		> n)</li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:ResultType"
+	    >ResultType</a
+	    > = Double</li
+	  ><li class="src short"
+	  ><a href="#v:opTypePreced"
+	    >opTypePreced</a
+	    > :: <a href="Ops.html#t:OpType"
+	    >OpType</a
+	    > -&gt; Int</li
+	  ><li class="src short"
+	  ><a href="#v:opTypeEval"
+	    >opTypeEval</a
+	    > :: <a href="Ops.html#t:OpType"
+	    >OpType</a
+	    > -&gt; <a href="Ops.html#t:ResultType"
+	    >ResultType</a
+	    > -&gt; <a href="Ops.html#t:ResultType"
+	    >ResultType</a
+	    > -&gt; <a href="Failable.html#t:Failable"
+	    >Failable</a
+	    > <a href="Ops.html#t:ResultType"
+	    >ResultType</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:opChar"
+	    >opChar</a
+	    > :: <a href="Ops.html#t:OpType"
+	    >OpType</a
+	    > -&gt; Char</li
+	  ><li class="src short"
+	  ><a href="#v:assocOpType"
+	    >assocOpType</a
+	    > :: Char -&gt; <a href="Failable.html#t:Failable"
+	    >Failable</a
+	    > <a href="Ops.html#t:OpType"
+	    >OpType</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:assocUnSymb"
+	    >assocUnSymb</a
+	    > :: String -&gt; <a href="Failable.html#t:Failable"
+	    >Failable</a
+	    > <a href="Ops.html#t:UnaryOp"
+	    >UnaryOp</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:opChars"
+	    >opChars</a
+	    > :: String</li
+	  ><li class="src short"
+	  ><a href="#v:unOpSymbs"
+	    >unOpSymbs</a
+	    > :: [String]</li
+	  ><li class="src short"
+	  ><a href="#v:eval"
+	    >eval</a
+	    > :: <a href="Ops.html#t:Expr"
+	    >Expr</a
+	    > <a href="Ops.html#t:ResultType"
+	    >ResultType</a
+	    > -&gt; <a href="Failable.html#t:Failable"
+	    >Failable</a
+	    > <a href="Ops.html#t:ResultType"
+	    >ResultType</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a id="t:OpType" class="def"
+	    >OpType</a
+	    > <a href="#t:OpType" class="selflink"
+	    >#</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Token representing binary operators</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a id="v:Add" class="def"
+		  >Add</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Token for addition</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a id="v:Sub" class="def"
+		  >Sub</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Token for subtraction</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a id="v:Mul" class="def"
+		  >Mul</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Token for multiplication</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a id="v:Div" class="def"
+		  >Div</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Token for division</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a id="v:Exp" class="def"
+		  >Exp</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Token for exponentiation</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a id="v:Mod" class="def"
+		  >Mod</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Token for modulo</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:OpType" class="caption collapser" onclick="toggleSection('i:OpType')"
+	    >Instances</p
+	    ><div id="section.i:OpType" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><span id="control.i:id:OpType:Show:1" class="instance expander" onclick="toggleSection('i:id:OpType:Show:1')"
+		      ></span
+		      > Show <a href="Ops.html#t:OpType"
+		      >OpType</a
+		      ></span
+		    > <a href="#t:OpType" class="selflink"
+		    >#</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td colspan="2"
+		  ><div id="section.i:id:OpType:Show:1" class="inst-details hide"
+		    ><div class="subs methods"
+		      ><p class="caption"
+			>Methods</p
+			><p class="src"
+			><a href="#v:showsPrec"
+			  >showsPrec</a
+			  > :: Int -&gt; <a href="Ops.html#t:OpType"
+			  >OpType</a
+			  > -&gt; ShowS</p
+			><p class="src"
+			><a href="#v:show"
+			  >show</a
+			  > :: <a href="Ops.html#t:OpType"
+			  >OpType</a
+			  > -&gt; String</p
+			><p class="src"
+			><a href="#v:showList"
+			  >showList</a
+			  > :: [<a href="Ops.html#t:OpType"
+			  >OpType</a
+			  >] -&gt; ShowS</p
+			></div
+		      ></div
+		    ></td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a id="t:UnaryOp" class="def"
+	    >UnaryOp</a
+	    > <a href="#t:UnaryOp" class="selflink"
+	    >#</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Token representing unary operators</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a id="v:Neg" class="def"
+		  >Neg</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Token for negation</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a id="v:Succ" class="def"
+		  >Succ</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Token for successor</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:UnaryOp" class="caption collapser" onclick="toggleSection('i:UnaryOp')"
+	    >Instances</p
+	    ><div id="section.i:UnaryOp" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><span id="control.i:id:UnaryOp:Show:1" class="instance expander" onclick="toggleSection('i:id:UnaryOp:Show:1')"
+		      ></span
+		      > Show <a href="Ops.html#t:UnaryOp"
+		      >UnaryOp</a
+		      ></span
+		    > <a href="#t:UnaryOp" class="selflink"
+		    >#</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td colspan="2"
+		  ><div id="section.i:id:UnaryOp:Show:1" class="inst-details hide"
+		    ><div class="subs methods"
+		      ><p class="caption"
+			>Methods</p
+			><p class="src"
+			><a href="#v:showsPrec"
+			  >showsPrec</a
+			  > :: Int -&gt; <a href="Ops.html#t:UnaryOp"
+			  >UnaryOp</a
+			  > -&gt; ShowS</p
+			><p class="src"
+			><a href="#v:show"
+			  >show</a
+			  > :: <a href="Ops.html#t:UnaryOp"
+			  >UnaryOp</a
+			  > -&gt; String</p
+			><p class="src"
+			><a href="#v:showList"
+			  >showList</a
+			  > :: [<a href="Ops.html#t:UnaryOp"
+			  >UnaryOp</a
+			  >] -&gt; ShowS</p
+			></div
+		      ></div
+		    ></td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a id="t:Expr" class="def"
+	    >Expr</a
+	    > n <a href="#t:Expr" class="selflink"
+	    >#</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Datatype representing an expression, either a constant number, a
  | unary operator applied to an expression, or a binary operator
- | applied to two expressions.</p></div><div class="subs constructors"><p class="caption">Constructors</p><table><tr><td class="src"><a id="v:Const" class="def">Const</a> n</td><td class="doc"><p>A constant number</p></td></tr><tr><td class="src"><a id="v:Un" class="def">Un</a> <a href="Ops.html#t:UnaryOp">UnaryOp</a> (<a href="Ops.html#t:Expr">Expr</a> n)</td><td class="doc"><p>A unary operator applied to an expression.</p></td></tr><tr><td class="src"><a id="v:Op" class="def">Op</a> <a href="Ops.html#t:OpType">OpType</a> (<a href="Ops.html#t:Expr">Expr</a> n) (<a href="Ops.html#t:Expr">Expr</a> n)</td><td class="doc"><p>A Binary operator applied to two expressions.</p></td></tr></table></div><div class="subs instances"><p id="control.i:Expr" class="caption collapser" onclick="toggleSection('i:Expr')">Instances</p><div id="section.i:Expr" class="show"><table><tr><td class="src clearfix"><span class="inst-left"><span id="control.i:id:Expr:Show:1" class="instance expander" onclick="toggleSection('i:id:Expr:Show:1')"></span> Show n =&gt; Show (<a href="Ops.html#t:Expr">Expr</a> n)</span> <a href="#t:Expr" class="selflink">#</a></td><td class="doc empty">&nbsp;</td></tr><tr><td colspan="2"><div id="section.i:id:Expr:Show:1" class="inst-details hide"><div class="subs methods"><p class="caption">Methods</p><p class="src"><a href="#v:showsPrec">showsPrec</a> :: Int -&gt; <a href="Ops.html#t:Expr">Expr</a> n -&gt; ShowS</p><p class="src"><a href="#v:show">show</a> :: <a href="Ops.html#t:Expr">Expr</a> n -&gt; String</p><p class="src"><a href="#v:showList">showList</a> :: [<a href="Ops.html#t:Expr">Expr</a> n] -&gt; ShowS</p></div></div></td></tr></table></div></div></div><div class="top"><p class="src"><a id="v:opTypePreced" class="def">opTypePreced</a> :: <a href="Ops.html#t:OpType">OpType</a> -&gt; Int <a href="#v:opTypePreced" class="selflink">#</a></p><div class="doc"><p>A function associating each binary operator to its precedence.</p></div></div><div class="top"><p class="src"><a id="v:opTypeEval" class="def">opTypeEval</a> :: Floating n =&gt; <a href="Ops.html#t:OpType">OpType</a> -&gt; n -&gt; n -&gt; n <a href="#v:opTypeEval" class="selflink">#</a></p><div class="doc"><p>A function that applies a binary operator to two numbers.</p></div></div><div class="top"><p class="src"><a id="v:opChar" class="def">opChar</a> :: <a href="Ops.html#t:OpType">OpType</a> -&gt; Char <a href="#v:opChar" class="selflink">#</a></p><div class="doc"><p>A function that associates each binary operator to its symbol.</p></div></div><div class="top"><p class="src"><a id="v:assocOpType" class="def">assocOpType</a> :: Char -&gt; <a href="Ops.html#t:OpType">OpType</a> <a href="#v:assocOpType" class="selflink">#</a></p><div class="doc"><p>A function that associates a character to a binary operator.</p></div></div><div class="top"><p class="src"><a id="v:assocUnSymb" class="def">assocUnSymb</a> :: String -&gt; <a href="Ops.html#t:UnaryOp">UnaryOp</a> <a href="#v:assocUnSymb" class="selflink">#</a></p><div class="doc"><p>A function that associates a symbol to its unary operator.</p></div></div><div class="top"><p class="src"><a id="v:opChars" class="def">opChars</a> :: [Char] <a href="#v:opChars" class="selflink">#</a></p><div class="doc"><p>The set of all chars that are associated to a binary operator.</p></div></div><div class="top"><p class="src"><a id="v:unOpSymbs" class="def">unOpSymbs</a> :: [String] <a href="#v:unOpSymbs" class="selflink">#</a></p><div class="doc"><p>The set of all strings that are associated to a unary operator.</p></div></div><div class="top"><p class="src"><a id="v:eval" class="def">eval</a> :: Floating n =&gt; <a href="Ops.html#t:Expr">Expr</a> n -&gt; n <a href="#v:eval" class="selflink">#</a></p><div class="doc"><p>A function that recursively evaluates an expression to the fractional it represents.</p></div></div></div></div><div id="footer"><p>Produced by <a href="http://www.haskell.org/haddock/">Haddock</a> version 2.18.1</p></div></body></html>
+ | applied to two expressions.</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a id="v:Const" class="def"
+		  >Const</a
+		  > n</td
+		><td class="doc"
+		><p
+		  >A constant number</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a id="v:Un" class="def"
+		  >Un</a
+		  > <a href="Ops.html#t:UnaryOp"
+		  >UnaryOp</a
+		  > (<a href="Ops.html#t:Expr"
+		  >Expr</a
+		  > n)</td
+		><td class="doc"
+		><p
+		  >A unary operator applied to an expression.</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a id="v:Op" class="def"
+		  >Op</a
+		  > <a href="Ops.html#t:OpType"
+		  >OpType</a
+		  > (<a href="Ops.html#t:Expr"
+		  >Expr</a
+		  > n) (<a href="Ops.html#t:Expr"
+		  >Expr</a
+		  > n)</td
+		><td class="doc"
+		><p
+		  >A Binary operator applied to two expressions.</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:Expr" class="caption collapser" onclick="toggleSection('i:Expr')"
+	    >Instances</p
+	    ><div id="section.i:Expr" class="show"
+	    ><table
+	      ><tr
+		><td class="src clearfix"
+		  ><span class="inst-left"
+		    ><span id="control.i:id:Expr:Show:1" class="instance expander" onclick="toggleSection('i:id:Expr:Show:1')"
+		      ></span
+		      > Show n =&gt; Show (<a href="Ops.html#t:Expr"
+		      >Expr</a
+		      > n)</span
+		    > <a href="#t:Expr" class="selflink"
+		    >#</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td colspan="2"
+		  ><div id="section.i:id:Expr:Show:1" class="inst-details hide"
+		    ><div class="subs methods"
+		      ><p class="caption"
+			>Methods</p
+			><p class="src"
+			><a href="#v:showsPrec"
+			  >showsPrec</a
+			  > :: Int -&gt; <a href="Ops.html#t:Expr"
+			  >Expr</a
+			  > n -&gt; ShowS</p
+			><p class="src"
+			><a href="#v:show"
+			  >show</a
+			  > :: <a href="Ops.html#t:Expr"
+			  >Expr</a
+			  > n -&gt; String</p
+			><p class="src"
+			><a href="#v:showList"
+			  >showList</a
+			  > :: [<a href="Ops.html#t:Expr"
+			  >Expr</a
+			  > n] -&gt; ShowS</p
+			></div
+		      ></div
+		    ></td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a id="t:ResultType" class="def"
+	    >ResultType</a
+	    > = Double <a href="#t:ResultType" class="selflink"
+	    >#</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >This determines the type of the result that the calculator returns.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a id="v:opTypePreced" class="def"
+	    >opTypePreced</a
+	    > :: <a href="Ops.html#t:OpType"
+	    >OpType</a
+	    > -&gt; Int <a href="#v:opTypePreced" class="selflink"
+	    >#</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >A function associating each binary operator to its precedence.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a id="v:opTypeEval" class="def"
+	    >opTypeEval</a
+	    > :: <a href="Ops.html#t:OpType"
+	    >OpType</a
+	    > -&gt; <a href="Ops.html#t:ResultType"
+	    >ResultType</a
+	    > -&gt; <a href="Ops.html#t:ResultType"
+	    >ResultType</a
+	    > -&gt; <a href="Failable.html#t:Failable"
+	    >Failable</a
+	    > <a href="Ops.html#t:ResultType"
+	    >ResultType</a
+	    > <a href="#v:opTypeEval" class="selflink"
+	    >#</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >A function that applies a binary operator to two numbers.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a id="v:opChar" class="def"
+	    >opChar</a
+	    > :: <a href="Ops.html#t:OpType"
+	    >OpType</a
+	    > -&gt; Char <a href="#v:opChar" class="selflink"
+	    >#</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >A function that associates each binary operator to its symbol.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a id="v:assocOpType" class="def"
+	    >assocOpType</a
+	    > :: Char -&gt; <a href="Failable.html#t:Failable"
+	    >Failable</a
+	    > <a href="Ops.html#t:OpType"
+	    >OpType</a
+	    > <a href="#v:assocOpType" class="selflink"
+	    >#</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >A function that associates a character to a binary operator.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a id="v:assocUnSymb" class="def"
+	    >assocUnSymb</a
+	    > :: String -&gt; <a href="Failable.html#t:Failable"
+	    >Failable</a
+	    > <a href="Ops.html#t:UnaryOp"
+	    >UnaryOp</a
+	    > <a href="#v:assocUnSymb" class="selflink"
+	    >#</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >A function that associates a symbol to its unary operator.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a id="v:opChars" class="def"
+	    >opChars</a
+	    > :: String <a href="#v:opChars" class="selflink"
+	    >#</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >The set of all chars that are associated to a binary operator.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a id="v:unOpSymbs" class="def"
+	    >unOpSymbs</a
+	    > :: [String] <a href="#v:unOpSymbs" class="selflink"
+	    >#</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >The set of all strings that are associated to a unary operator.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a id="v:eval" class="def"
+	    >eval</a
+	    > :: <a href="Ops.html#t:Expr"
+	    >Expr</a
+	    > <a href="Ops.html#t:ResultType"
+	    >ResultType</a
+	    > -&gt; <a href="Failable.html#t:Failable"
+	    >Failable</a
+	    > <a href="Ops.html#t:ResultType"
+	    >ResultType</a
+	    > <a href="#v:eval" class="selflink"
+	    >#</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >A function that recursively evaluates an expression to the fractional it represents.</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.18.1</p
+      ></div
+    ></body
+  ></html
+>

@@ -1,16 +1,16 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.2.
+-- This file has been generated from package.yaml by hpack version 0.33.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 420d13c67617aafb5a9ea898160025513fff99e4c6aeeb25651306f7e0b067c1
+-- hash: 0d61780b4022c5cec9a81e0664671677443c4ba2e3fb888fc232cab90ab224f2
 
-name:           Calculator
-version:        0.2.2.1
-description:    Please see the README on GitHub at <https://github.com/ddxtanx/calculator#readme>
-homepage:       https://github.com/ddxtanx/calculator#readme
-bug-reports:    https://github.com/ddxtanx/calculator/issues
+name:           Haskulator
+version:        0.2.3.0
+description:    Please see the README on GitHub at <https://github.com/ddxtanx/haskulator#readme>
+homepage:       https://github.com/ddxtanx/haskulator#readme
+bug-reports:    https://github.com/ddxtanx/haskulator/issues
 author:         Garrett Credi
 maintainer:     Garrett Credi
 copyright:      2020 Garrett Credi
@@ -20,7 +20,7 @@ build-type:     Simple
 
 source-repository head
   type: git
-  location: https://github.com/ddxtanx/calculator
+  location: https://github.com/ddxtanx/haskulator
 
 library
   exposed: True
@@ -31,7 +31,7 @@ library
       Parser
       StringFuncs
   other-modules:
-      Paths_Calculator
+      Paths_Haskulator
   hs-source-dirs:
       src
   default-extensions: BangPatterns
@@ -39,7 +39,7 @@ library
       base <=4.13.0.0
   default-language: Haskell2010
 
-executable Calculator
+executable Haskulator
   main-is: Main.hs
   other-modules:
       Calculate
@@ -47,7 +47,7 @@ executable Calculator
       Ops
       Parser
       StringFuncs
-      Paths_Calculator
+      Paths_Haskulator
   hs-source-dirs:
       app
       src
@@ -64,12 +64,12 @@ test-suite calculator-tests
       OpsTest
       ParserTest
       StringFuncsTest
-      Paths_Calculator
+      Paths_Haskulator
   hs-source-dirs:
       test
   default-extensions: BangPatterns
   build-depends:
-      Calculator
+      Haskulator
     , base <=4.13.0.0
     , tasty
     , tasty-hunit

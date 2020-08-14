@@ -1,9 +1,9 @@
-name: Calculator
-version: 0.2.2.1
-description: Please see the README on GitHub at <https://github.com/ddxtanx/calculator#readme>
+name: Haskulator
+version: 0.2.3.0
+description: Please see the README on GitHub at <https://github.com/ddxtanx/haskulator#readme>
 author: Garrett Credi
 copyright: 2020 Garrett Credi
-github: ddxtanx/calculator
+github: ddxtanx/haskulator
 dependencies:
   base: "<=4.13.0.0"
 default-extensions:
@@ -25,7 +25,7 @@ tests:
     main: Main.hs
     source-dirs: test
     dependencies: 
-      - Calculator
+      - Haskulator
       - tasty
       - tasty-hunit
       - tasty-quickcheck
